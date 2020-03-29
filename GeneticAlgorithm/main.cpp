@@ -6,7 +6,7 @@ using namespace std;
 
 class Individe{
     public:
-    	vector <bool> ind;
+        vector <bool> ind;//test
         int quality = qual();
         bool qeye = false, leye = false;
         string gens = str(ind);
