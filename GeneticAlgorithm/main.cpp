@@ -8,16 +8,16 @@ class Individe{
     public:
         vector <bool> ind;//test
         int quality = qual();
-        bool qeye = false, geye = false;
-        string gens;
+        bool qeye = false, leye = false;
+        string gens = str(ind);
 
         int qual() {
-            if (qeye) return quality;
+            //if (qeye) return quality;
             int g = 0;
             for(size_t i = 0; i < ind.size(); i++) if(ind[i]) g++;
             quality = g;
-            qeye = true;
-            return quality;
+            //qeye = true;
+            return g;
         }
 
         Individe(int n) { //settings done
@@ -25,7 +25,6 @@ class Individe{
                 if (rand() % 2) ind.push_back(true);
                 else ind.push_back(false);
             }
-            gens = str(ind);
         }
 
         void mutation (vector <bool> x){ //doesn't usefull
@@ -36,18 +35,23 @@ class Individe{
                 }
             }
         }
-
+        void mutation2 (vector <bool> x){ //doesn't usefull
+            for (size_t i = 0; i < x.size(); i++) {
+                if (rand() % 100 <= 1) (ind[i]) ? ind[i] = false : ind[i] = true;
+            }
+        }
+        
         string str(vector <bool> x) {
-           if(geye) return gens;
-            string s = "";
+            //if(leye) return gens;
+        	string s;
         	for(size_t i = 0; i < x.size(); i++){
                 if(x[i]) s += '1';
 				else s += '0';	
 			}
 			gens = s;
-            geye = true;
+            //leye = true;
             return gens;
-        }
+		}
 
         size_t sz () {
             return ind.size();
@@ -55,13 +59,13 @@ class Individe{
 
 };
 
-vector <Individe> make_population (int size,int capacity) {//make settings
-    vector <Individe> x;
-    for(int i = 0; i < capacity; i++){
-        Individe rec(size);
-        x.push_back(rec);
-    }
-    return x;
+double generation_quality(vector <Individe> x){
+    double seq = 0;
+    for(size_t i = 0; i < x.size(); i++){
+        seq += x[i].qual(); //quality
+	}
+    seq /= x.size();
+    return seq;
 }
 
 void divis (int &del, size_t len) {
@@ -108,20 +112,20 @@ void crossover(vector <Individe> &x, unsigned int n){//n is mutation procent
     x = new_x;
 }
 
-double generation_quality(vector <Individe> x){
-    double seq = 0;
-    for(size_t i = 0; i < x.size(); i++){
-        seq += x[i].qual(); //quality
-    }
-    seq /= x.size();
-    return seq;
-}
-
 void generate_generation(vector <Individe> &x, unsigned int n){//n is mutation procent
 
     cout << endl << "CURRENT GENERATION" << endl << endl << "Middle quality of generation: " << generation_quality(x) << endl << endl;//time
 
     crossover(x, n);
+}
+
+vector <Individe> make_population (int size,int capacity) {//make settings
+	vector <Individe> x;
+    for(int i = 0; i < capacity; i++){
+        Individe rec(size);
+		x.push_back(rec);
+	}
+	return x;
 }
 
 void see_generation (vector <Individe> x){
@@ -135,7 +139,9 @@ void see_generation (vector <Individe> x){
 int best_individe(vector <Individe> x, int n) {
     int z = 0;
     for(size_t i = 0; i < x.size(); i++){
-        if(x[i].qual() == n) z++;
+        if(x[i].qual() == n){
+            z++;
+        }
     }
     return z;
 }
