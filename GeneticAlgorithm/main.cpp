@@ -119,7 +119,7 @@ double generation_quality(vector <Individe> x){
 
 void generate_generation(vector <Individe> &x, unsigned int n){//n is mutation procent
 
-    cout << endl << "CURRENT GENERATION" << endl << endl << "Middle quality of generation: " << generation_quality(x) << endl << endl;//time
+    //cout << endl << "CURRENT GENERATION" << endl << endl << "Middle quality of generation: " << generation_quality(x) << endl << endl;//time
 
     crossover(x, n);
 }
@@ -155,21 +155,20 @@ int main()
     vector <Individe> x;
     x = make_population (sz, capacity);
 
-    int f = 0, r = 0, d = 0;
-    for(int i = 0; i < 100; i++){
-        for(int j = 0; j < 100; j++){
+    int f = 0, r = 0;
+    for(int i = 0; i < 10; i++){
+        for(int j = 0; j < 10; j++){
             see_generation(x);
             generate_generation(x, mutation);
-            cout << endl << endl << "NEXT GENERATION - " << i << endl;
-            if(best_individe(x, 10) >= 10){
+            cout << endl << endl << "NEXT GENERATION - " << j + 1 << endl;
+            if(best_individe(x, 10) >= 5){
                 f++;
-                d+=i;
-                break;
+                j = 1000000000;
             }
         }
         r++;
     }
-    cout << endl << "TRIES - " << r << endl << "IDEAL - " << f << endl << "MIDDLE - " << d / 100 << endl;
+    cout << endl << "TRIES - " << r << endl << "IDEAL - " << f << endl;
 
     return 0;
 }
