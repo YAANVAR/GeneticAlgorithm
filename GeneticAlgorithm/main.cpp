@@ -135,7 +135,7 @@ void showncrossover(vector <Individe> &x, unsigned int mut){//mut is mutation pr
             temp.mutation(temp.ind, j, mut);
         }
         //mutation
-        cout << x[i].str(x[i].ind) << "\t" << x[i].quality <<  endl;//////////shows gens///////////////////////////////////////
+        cout << x[i].gens << "\t" << x[i].quality <<  endl;//////////shows gens///////////////////////////////////////
         new_x.push_back(temp);
     }
     x = new_x;
@@ -149,7 +149,7 @@ void generate_generation(vector <Individe> &x, unsigned int mut){//mut is mutati
 void see_generation (vector <Individe> x){
 	cout << endl << "CURRENT GENERATION" << endl;
     for(size_t i = 0; i < x.size(); i++){
-        cout << x[i].str(x[i].ind) << "\t" << x[i].qual() << endl;//////////////////////////////////////////
+        cout << x[i].gens << "\t" << x[i].qual() << endl;//////////////////////////////////////////
 	}
 	cout << endl << "Middle quality of generation: " << generation_quality(x) << endl;
 }
@@ -183,9 +183,9 @@ int main()
 
     for(int i = 0; i < pop_quant; i++){
         for(int j = 0; j < tests; j++){
-            see_generation(x);
-            generate_generation(x, mutation);
-            //showncrossover(x, mutation);
+            //see_generation(x);
+            //generate_generation(x, mutation);
+            showncrossover(x, mutation);
             cout << endl << endl << "NEXT GENERATION - " << j + 1 << endl;
             if(best_individe(x, 10) >= 1){
                 f++;
