@@ -104,7 +104,7 @@ void crossover(vector <Individe> &x, unsigned int mut){//mut is mutation procent
 double generation_quality(vector <Individe> x){
     double seq = 0;
     for(size_t i = 0; i < x.size(); i++){
-        seq += x[i].qual(); //quality
+        seq += x[i].quality; //quality
     }
     seq /= x.size();
     return seq;
@@ -135,7 +135,7 @@ void showncrossover(vector <Individe> &x, unsigned int mut){//mut is mutation pr
             temp.mutation(temp.ind, j, mut);
         }
         //mutation
-        cout << temp.gens << endl;//////////shows gens/////////
+        cout << x[i].str(x[i].ind) << "\t" << x[i].quality <<  endl;//////////shows gens///////////////////////////////////////
         new_x.push_back(temp);
     }
     x = new_x;
@@ -166,31 +166,34 @@ int main()
 {
 	srand(time(NULL));
 	
-    int sz, capacity, mutation;
+    int sz, capacity, mutation, pop_quant, tests, f = 0;
     cout << "Size of the line: ";
     cin >> sz;
     cout << "Population capacity: ";
     cin >> capacity;
     cout << "Procent of mutation: ";
     cin >> mutation;
+    cout << "Quantity of populations: ";
+    cin >> pop_quant;
+    cout << "Quantity of tests for one population: ";
+    cin >> tests;
 
     vector <Individe> x;
     x = make_population (sz, capacity);
 
-    int f = 0, r = 0;
-    for(int i = 0; i < 10; i++){
-        for(int j = 0; j < 10; j++){
+    for(int i = 0; i < pop_quant; i++){
+        for(int j = 0; j < tests; j++){
             see_generation(x);
             generate_generation(x, mutation);
+            //showncrossover(x, mutation);
             cout << endl << endl << "NEXT GENERATION - " << j + 1 << endl;
-            if(best_individe(x, 10) >= 5){
+            if(best_individe(x, 10) >= 1){
                 f++;
-                j = 1000000000;
+                j = tests;
             }
         }
-        r++;
     }
-    cout << endl << "TRIES - " << r << endl << "IDEAL - " << f << endl;
+    cout << endl << "TRIES - " << pop_quant << endl << "IDEAL - " << f << endl;
 
     return 0;
 }
