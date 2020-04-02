@@ -6,8 +6,8 @@ using namespace std;
 
 class Individe{
     public:
-        vector <bool> ind;//test
-        int quality = qual();
+        vector <bool> ind;
+        int quality;
         bool qeye = false, geye = false;
         string gens;
 
@@ -26,14 +26,13 @@ class Individe{
                 else ind.push_back(false);
             }
             gens = str(ind);
+            quality = qual();
         }
 
-        void mutation (vector <bool> x){ //doesn't usefull
-            for (size_t i = 0; i < x.size(); i++) {
-                if (rand() % 100 <= 1) {
-                    if (ind[i]) ind[i] = false;
-                    else ind[i] = true;
-                }
+        void mutation (vector <bool> &x, int cnt, int mut){ //now is usefull!
+            if(rand() % 100 < mut){
+                if(x[cnt]) x[cnt] = false;
+                else x[cnt] = true;
             }
         }
 
@@ -55,7 +54,7 @@ class Individe{
 
 };
 
-vector <Individe> make_population (int size,int capacity) {//make settings
+vector <Individe> make_population (int size,int capacity) {//size is length of individe. capacity refers to population
     vector <Individe> x;
     for(int i = 0; i < capacity; i++){
         Individe rec(size);
@@ -74,7 +73,7 @@ void selection(int &x, int &y, size_t sz){
     y = rand() % sz;
 }
 
-void crossover(vector <Individe> &x, unsigned int n){//n is mutation procent
+void crossover(vector <Individe> &x, unsigned int mut){//mut is mutation procent
     vector <Individe> new_x;
     for (size_t i = 0; i < x.size(); i++) {
         Individe temp(x[0].sz());
@@ -89,18 +88,12 @@ void crossover(vector <Individe> &x, unsigned int n){//n is mutation procent
         for(size_t j = temp.sz() - del; j < temp.sz(); j++){
             temp.ind[i] = x[s].ind[i];
             //mutation
-            if(rand() % 100 == n){
-                if(x[i].ind[j]) x[i].ind[j] = false;
-                else x[i].ind[j] = true;
-            }
+            temp.mutation(temp.ind, j, mut);
             //mutation
         }
         //mutation
         for(size_t j = 0; j < temp.sz() - del; j++){
-            if(rand() % 100 == n){
-                if(x[i].ind[j]) x[i].ind[j] = false;
-                else x[i].ind[j] = true;
-            }
+            temp.mutation(temp.ind, j, mut);
         }
         //mutation
         new_x.push_back(temp);
@@ -117,7 +110,7 @@ double generation_quality(vector <Individe> x){
     return seq;
 }
 
-void showncrossover(vector <Individe> &x, unsigned int n){//n is mutation procent
+void showncrossover(vector <Individe> &x, unsigned int mut){//mut is mutation procent
     cout << endl << "CURRENT GENERATION" << endl;
     cout << endl << "Middle quality of generation: " << generation_quality(x) << endl << endl;
     vector <Individe> new_x;
@@ -134,18 +127,12 @@ void showncrossover(vector <Individe> &x, unsigned int n){//n is mutation procen
         for(size_t j = temp.sz() - del; j < temp.sz(); j++){
             temp.ind[i] = x[s].ind[i];
             //mutation
-            if(rand() % 100 == n){
-                if(x[i].ind[j]) x[i].ind[j] = false;
-                else x[i].ind[j] = true;
-            }
+            temp.mutation(temp.ind, j, mut);
             //mutation
         }
         //mutation
         for(size_t j = 0; j < temp.sz() - del; j++){
-            if(rand() % 100 == n){
-                if(x[i].ind[j]) x[i].ind[j] = false;
-                else x[i].ind[j] = true;
-            }
+            temp.mutation(temp.ind, j, mut);
         }
         //mutation
         cout << temp.gens << endl;//////////shows gens/////////
@@ -154,15 +141,15 @@ void showncrossover(vector <Individe> &x, unsigned int n){//n is mutation procen
     x = new_x;
 }
 
-void generate_generation(vector <Individe> &x, unsigned int n){//n is mutation procent
-    //crossover(x, n);
-    showncrossover(x, n);
+void generate_generation(vector <Individe> &x, unsigned int mut){//mut is mutation procent
+    crossover(x, mut);
+    //showncrossover(x, n);
 }
 
 void see_generation (vector <Individe> x){
 	cout << endl << "CURRENT GENERATION" << endl;
     for(size_t i = 0; i < x.size(); i++){
-        cout << x[i].str(x[i].ind) << endl;
+        cout << x[i].str(x[i].ind) << "\t" << x[i].qual() << endl;//////////////////////////////////////////
 	}
 	cout << endl << "Middle quality of generation: " << generation_quality(x) << endl;
 }
@@ -170,7 +157,7 @@ void see_generation (vector <Individe> x){
 int best_individe(vector <Individe> x, int n) {
     int z = 0;
     for(size_t i = 0; i < x.size(); i++){
-        if(x[i].qual() == n) z++;
+        if(x[i].qual() >= n) z++;
     }
     return z;
 }
