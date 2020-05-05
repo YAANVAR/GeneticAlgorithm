@@ -20,7 +20,7 @@ class Individe{
             return quality;
         }
 
-        Individe(int n) { //settings done
+        Individe(int n) {
             for (int i = 0; i < n; i++) {
                 if (rand() % 2) ind.push_back(true);
                 else ind.push_back(false);
@@ -29,7 +29,7 @@ class Individe{
             quality = qual();
         }
 
-        void mutation (vector <bool> &x, int cnt, int mut){ //now is usefull!
+        void mutation (vector <bool> &x, int cnt, int mut){
             if(rand() % 100 < mut){
                 if(x[cnt]) x[cnt] = false;
                 else x[cnt] = true;
@@ -65,7 +65,7 @@ vector <Individe> make_population (int size,int capacity) {//size is length of i
 
 void divis (int &del, size_t len) {
     del = rand() % len;
-    //del = len / 2; //equal divisor = del                       ////////////////equal//////////////
+    del = len / 2; //equal divisor = del
 }
 
 void selection(int &x, int &y, size_t sz){
@@ -73,7 +73,7 @@ void selection(int &x, int &y, size_t sz){
     y = rand() % sz;
 }
 
-void crossover(vector <Individe> &x, unsigned int mut){//mut is mutation procent
+void crossover(vector <Individe> &x, unsigned int mut){//mut is mutation procent //usefull
     vector <Individe> new_x;
     for (size_t i = 0; i < x.size(); i++) {
         Individe temp(x[0].sz());
@@ -135,21 +135,21 @@ void showncrossover(vector <Individe> &x, unsigned int mut){//mut is mutation pr
             temp.mutation(temp.ind, j, mut);
         }
         //mutation
-        cout << x[i].gens << "\t" << x[i].quality <<  endl;//////////shows gens///////////////////////////////////////
+        cout << x[i].gens << "\t" << x[i].quality <<  endl;//////////shows gens//////////////
         new_x.push_back(temp);
     }
     x = new_x;
 }
 
-void generate_generation(vector <Individe> &x, unsigned int mut){//mut is mutation procent
+void generate_generation(vector <Individe> &x, unsigned int mut){//mut is mutation procent // useless
     crossover(x, mut);
     //showncrossover(x, n);
 }
 
-void see_generation (vector <Individe> x){
+void see_generation (vector <Individe> x){ //isn't useful
 	cout << endl << "CURRENT GENERATION" << endl;
     for(size_t i = 0; i < x.size(); i++){
-        cout << x[i].gens << "\t" << x[i].qual() << endl;//////////////////////////////////////////
+        cout << x[i].gens << "\t" << x[i].qual() << endl;//////////////////////////////////
 	}
 	cout << endl << "Middle quality of generation: " << generation_quality(x) << endl;
 }
@@ -166,7 +166,7 @@ int main()
 {
 	srand(time(NULL));
 	
-    int sz, capacity, mutation, pop_quant, tests, f = 0;
+    int sz, capacity, mutation, pop_quant, tests, f = 0, id;
     cout << "Size of the line: ";
     cin >> sz;
     cout << "Population capacity: ";
@@ -177,6 +177,8 @@ int main()
     cin >> pop_quant;
     cout << "Quantity of tests for one population: ";
     cin >> tests;
+    cout << "How many 1 gens for ideal: ";
+    cin >> id;
 
     vector <Individe> x;
     x = make_population (sz, capacity);
@@ -185,9 +187,9 @@ int main()
         for(int j = 0; j < tests; j++){
             //see_generation(x);
             //generate_generation(x, mutation);
-            showncrossover(x, mutation);
+            showncrossover(x, mutation); //showncrossover is substitute see_generation and generate_generation
             cout << endl << endl << "NEXT GENERATION - " << j + 1 << endl;
-            if(best_individe(x, 10) >= 1){
+            if(best_individe(x, 10) >= id){
                 f++;
                 j = tests;
             }
