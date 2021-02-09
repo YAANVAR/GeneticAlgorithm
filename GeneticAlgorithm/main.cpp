@@ -132,7 +132,7 @@ void showncrossover(vector <Individe> &x, unsigned int mut){//mut is mutation pr
         }
         //mutation
         for(size_t j = 0; j < temp.sz() - del; j++){
-            temp.mutation(temp.ind, j, mut);
+            temp.mutation(temp.indu, j, mut);
         }
         //mutation
         cout << x[i].gens << "\t" << x[i].quality <<  endl;//////////shows gens//////////////
